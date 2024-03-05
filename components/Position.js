@@ -1,4 +1,5 @@
 import React from "react";
+import { inject, observer } from "mobx-react";
 import { useState } from "react";
 import {
   FormField,
@@ -11,12 +12,14 @@ import {
   Modal,
   Input,
 } from "semantic-ui-react";
-const Position = () => {
+import buyStore from "/store/BuyStore";
+import positionStore from "/store/positionStore";
+const Position = ({ handleStepClick }) => {
   const [price, setPrice] = useState("");
   const [iv, setIv] = useState("");
   const script = [
     { key: "tata", text: "tata", value: "tata" },
-    { key: "micro soft", text: "microsoft", value: "micro soft" },
+    { key: "microsoft", text: "microsoft", value: "microsoft" },
     { key: "reliance", text: "reliance", value: "reliance" },
     { key: "jio", text: "jio", value: "jio" },
   ];
@@ -48,12 +51,42 @@ const Position = () => {
     price: "",
     iv: "",
   });
-  const handleClick = () => {
-    console.log(formData);
+  const handleAddScript = () => {
+    buyStore.orders.push({
+      script: formData.script,
+      sprice: formData.sprice,
+      cepe: formData.cepe,
+      bs: formData.bs,
+      expdate: formData.expdate,
+      price: formData.price,
+      iv: formData.iv,
+    });
+    console.log(buyStore.orders);
+    toggleOrderCount(buyStore.orders.length);
+  };
+  const [orderCount, setOrderCount] = useState(0);
+  const toggleOrderCount = (count) => {
+    setOrderCount(count);
+
+    setformData({
+      script: "",
+      sprice: "",
+      cepe: "",
+      bs: "",
+      expdate: "",
+      price: "",
+      iv: "",
+    });
   };
 
+  const handleSaveClick = () => {
+    positionStore.buys.push(...buyStore.orders);
+    buyStore.clearOrders();
+    console.log(positionStore.buys);
+    handleStepClick(0);
+  };
   return (
-    <Form>
+    <Form fluid size="mini">
       <FormField>
         <label>Script</label>
         <Dropdown
@@ -131,12 +164,13 @@ const Position = () => {
           onChange={(e, { value }) => setformData({ ...formData, iv: value })}
         />
       </FormField>
-      <Button color="green" onClick={handleClick}>
+      <Button color="green" onClick={handleAddScript}>
         ADD MORE SCRIPT
       </Button>
-      <Button color="red">SAVE</Button>
+      <Button color="red" onClick={handleSaveClick}>
+        SAVE
+      </Button>
     </Form>
   );
 };
-
-export default Position;
+export default inject("buyStore", "positionStore")(observer(Position));

@@ -3,7 +3,7 @@ import { useState } from "react";
 import Order from "./Order";
 import Position from "./Position";
 import { Link, useNavigate } from "react-router-dom";
-import logoImage from "/images/firstbench.jpg";
+import logoImage from "/images/fb1.png";
 
 import {
   Container,
@@ -34,19 +34,22 @@ function Home() {
     console.log("working");
     navigate("/login");
   };
+  const menuStyle = {
+    backgroundColor: "#82817f",
+  };
 
   return (
     <div>
-      <Menu fixed="top" inverted color="grey">
+      <Menu fixed="top" style={menuStyle} inverted>
         <Container>
-          <Menu.Item as="a" header style={{ color: "orange" }}>
+          <Menu.Item as="a" header>
             <Image
               src={logoImage}
               size="mini"
               alt="Logo"
               style={{ marginRight: "2.0em" }}
             />
-            First Bench
+            Firstbench
           </Menu.Item>
 
           <Menu.Item as="b" position="right">
@@ -62,8 +65,8 @@ function Home() {
         </Container>
       </Menu>
 
-      <Container text style={{ marginTop: "7em" }}>
-        <StepGroup>
+      <Container style={{ maxWidth: "100%", marginTop: "6em" }}>
+        <StepGroup size="mini">
           <Step
             active={activeStep === 0}
             onClick={() => handleStepClick(0)}
@@ -94,12 +97,12 @@ function Home() {
         </StepGroup>
         {activeStep === 0 && (
           <Segment>
-            <Order handleStepClick={handleStepClick} />
+            <Order />
           </Segment>
         )}
         {activeStep === 1 && (
           <Segment>
-            <Position />
+            <Position handleStepClick={handleStepClick} />
           </Segment>
         )}
       </Container>

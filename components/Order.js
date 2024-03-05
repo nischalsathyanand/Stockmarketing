@@ -1,4 +1,6 @@
 import React from "react";
+import { inject, observer } from "mobx-react";
+import positionStore from "/store/positionStore";
 import {
   TableRow,
   TableHeaderCell,
@@ -8,12 +10,13 @@ import {
   Table,
 } from "semantic-ui-react";
 
-const Order = () => {
+const Order = ({ positionStore }) => {
   return (
     <div>
-      <Table>
+      <Table basic="very" unstackable>
         <TableHeader>
           <TableRow>
+            <TableHeaderCell>Slno</TableHeaderCell>
             <TableHeaderCell>Script</TableHeaderCell>
             <TableHeaderCell>Stright Price</TableHeaderCell>
             <TableHeaderCell>Ce/Pe</TableHeaderCell>
@@ -25,23 +28,24 @@ const Order = () => {
             <TableHeaderCell>Profite</TableHeaderCell>
           </TableRow>
         </TableHeader>
-
         <TableBody>
-          <TableRow verticalAlign="top">
-            <TableCell>test</TableCell>
-            <TableCell>test</TableCell>
-            <TableCell>test</TableCell>
-            <TableCell>test</TableCell>
-            <TableCell>test</TableCell>
-            <TableCell>test</TableCell>
-            <TableCell>test</TableCell>
-            <TableCell>test</TableCell>
-            <TableCell>test</TableCell>
-          </TableRow>
+          {positionStore.buys.map((orders, index) => (
+            <TableRow key={index} verticalAlign="top">
+              <TableCell>{index + 1}</TableCell>
+              <TableCell>{orders.script}</TableCell>
+              <TableCell>{orders.sprice}</TableCell>
+              <TableCell>{orders.cepe}</TableCell>
+              <TableCell>{orders.bs}</TableCell>
+              <TableCell>{orders.expdate}</TableCell>
+              <TableCell>{orders.iv}</TableCell>
+              <TableCell>{orders.price}</TableCell>
+              <TableCell>CurrentPrice</TableCell>
+              <TableCell>PROFIT</TableCell>
+            </TableRow>
+          ))}
         </TableBody>
       </Table>
     </div>
   );
 };
-
-export default Order;
+export default inject("positionStore")(observer(Order));

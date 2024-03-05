@@ -9,9 +9,10 @@ import {
 import React from "react";
 import { Provider, inject, observer } from "mobx-react";
 import buyStore from "./store/BuyStore";
+import positionStore from "./store/positionStore";
 function App() {
   return (
-    <Provider buyStore={buyStore}>
+    <Provider buyStore={buyStore} positionStore={positionStore}>
       <Router>
         <Routes>
           <Route path="/" element={<Navigate to="/login" />}></Route>
